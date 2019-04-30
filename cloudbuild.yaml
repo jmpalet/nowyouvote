@@ -3,6 +3,6 @@ steps:
   args: [ 'deploy', '--project', '$PROJECT_ID']
   secretEnv: ['FIREBASE_TOKEN']
 secrets:
-- kmsKeyName: projects/$PROJECT_ID/locations/global/keyRings/$$_KEYRING/cryptoKeys/$$_KEY
+- kmsKeyName: projects/$PROJECT_ID/locations/global/keyRings/KEYRING_NOWYOUVOTE/cryptoKeys/KEY_NOWYOUVOTE
   secretEnv:
     FIREBASE_TOKEN: CiQAe+tVl8bbbbCE+SAzkCYQAmr2jUlH+yRoEsdJph2/4lOo604SVgDQwb7wPaSwisZjDkLgQQLklmOBADMg3apH97/tEaNoHrXXHsPAlW71wwsxg8sGIp8Ty29dnHuje7XBJaKTNoIfHpco7Bk2uER6eu9DUpAzbUvineQ4
