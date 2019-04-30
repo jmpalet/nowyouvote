@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "nowyouvote-com"
+    "default": "nowyouvote-com",
+    "staging": "nowyouvote-stg",
+    "production": "nowyouvote-com"
   }
 }
