@@ -5,4 +5,4 @@ steps:
 secrets:
 - kmsKeyName: projects/$PROJECT_ID/locations/global/keyRings/$_KEYRING/cryptoKeys/$_KEY
   secretEnv:
-    FIREBASE_TOKEN: $_FIREBASE_TOKEN
+    FIREBASE_TOKEN: CiQAe+tVl8bbbbCE+SAzkCYQAmr2jUlH+yRoEsdJph2/4lOo604SVgDQwb7wPaSwisZjDkLgQQLklmOBADMg3apH97/tEaNoHrXXHsPAlW71wwsxg8sGIp8Ty29dnHuje7XBJaKTNoIfHpco7Bk2uER6eu9DUpAzbUvineQ4
