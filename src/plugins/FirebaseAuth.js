@@ -5,12 +5,12 @@ import 'firebase/auth'
 // import 'firebase/firestore';
 
 const config = {
-    apiKey: "AIzaSyAPTrugWv2_GF8nHecetJYgKkO5WkwDKSk",
-    authDomain: "nowyouvote-com.firebaseapp.com",
-    databaseURL: "https://nowyouvote-com.firebaseio.com",
-    projectId: "nowyouvote-com",
-    storageBucket: "nowyouvote-com.appspot.com",
-    messagingSenderId: "801533474477"
+    apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+    authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.VUE_APP_FIREBASE_DATABASE_URL,
+    projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID
   };
 
 export default {
