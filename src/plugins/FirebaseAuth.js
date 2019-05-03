@@ -18,6 +18,9 @@ export default {
       login: async (username, pass) => {
         return await auth.signInWithEmailAndPassword(username, pass)
       },
+      signup: async (username, pass) => {
+        return await auth.createUserWithEmailAndPassword(username, pass)
+      },
       logout: async () => {
         await auth.signOut()
       }

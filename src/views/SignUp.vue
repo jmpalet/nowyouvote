@@ -1,10 +1,10 @@
 <template>
-  <form class="login" @submit.prevent="onSubmit">
-    <h3>Login</h3>
+  <form class="sign-up" @submit.prevent="onSubmit">
+    <h3>Sign up</h3>
     <input type="text" v-model="email" placeholder="Email"><br>
     <input type="password" v-model="password" placeholder="Password"><br>
-    <input type="submit" value="Login"/>
-    <p>You don't have an account ? You can <router-link to="/sign-up">create one</router-link></p>
+    <input type="submit" value="Sign up"/>
+    <p>or go back to <router-link to="/login">login</router-link></p>
   </form>
 </template>
 
@@ -32,7 +32,7 @@
     },
     methods: {
       async onSubmit () {
-        const auth = await this.$auth.login(this.email, this.password)
+        const auth = await this.$auth.signup(this.email, this.password)
       }
     }
   }
