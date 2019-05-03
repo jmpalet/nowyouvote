@@ -1,40 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NowYouVote</title>
-
-    <style media="screen">
-      body { background: #FFF; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; text-align: center; }
-      #message h1 { font-size: 26px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 22px;}
-      #message p { font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter"; line-height: 140%; margin: 16px 0 24px; font-size: 14px; color: #555; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #3c3c3c; }
-      }
-    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>nowyouvote</title>
   </head>
   <body>
-    <div id="message">
-      <h1><span style="color:#5c5c5c">now</span><span style="color:#3c3c3c; font-weight: bold;">you</span><span style="color:#1c1c1c">vote</span><span style="color:#9c9c9c">.com</span></h1>
-      <p>🛠 Work in progress (test)</p>
-    </div>
-
-    <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyAPTrugWv2_GF8nHecetJYgKkO5WkwDKSk",
-        authDomain: "nowyouvote-com.firebaseapp.com",
-        databaseURL: "https://nowyouvote-com.firebaseio.com",
-        projectId: "nowyouvote-com",
-        storageBucket: "nowyouvote-com.appspot.com",
-        messagingSenderId: "801533474477"
-      };
-      firebase.initializeApp(config);
-    </script>
+    <noscript>
+      <strong>We're sorry but nowyouvote doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
   </body>
 </html>
