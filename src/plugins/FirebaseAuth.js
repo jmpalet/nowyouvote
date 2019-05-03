@@ -4,6 +4,8 @@ import 'firebase/app';
 import 'firebase/auth'
 // import 'firebase/firestore';
 
+console.log(process.env.NODE_ENV);
+
 const config = {
     apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
     authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
