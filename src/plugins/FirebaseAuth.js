@@ -1,5 +1,8 @@
 import store from './../store'
-import Firebase from 'firebase'
+import firebase from 'firebase/app';
+import 'firebase/app';
+import 'firebase/auth'
+// import 'firebase/firestore';
 
 const config = {
     apiKey: "AIzaSyAPTrugWv2_GF8nHecetJYgKkO5WkwDKSk",
@@ -12,8 +15,8 @@ const config = {
 
 export default {
   install: (Vue) => {  
-    const firebase = Firebase.initializeApp(config);
-    const auth = firebase.auth()
+    const app = firebase.initializeApp(config);
+    const auth = app.auth()
     Vue.prototype.$auth = {
       login: async (username, pass) => {
         return await auth.signInWithEmailAndPassword(username, pass)
