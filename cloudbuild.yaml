@@ -1,17 +1,21 @@
 steps:
 - name: 'gcr.io/cloud-builders/npm'
+  id: install
   args: ['install']
 - name: 'gcr.io/cloud-builders/npm'
+  id: build
+  waitFor:
+  - install
   entrypoint: 'bash'
   args:
   - '-c'
   - |
     echo $_ENV
     [[ "$_ENV" == "production" ]] && npm run build-prod && echo "Deploying on production..." 
-    [[ "$_ENV" == "staging" ]] && npm run build-stg && echo "Deploying on staging..." 
-#- name: 'gcr.io/cloud-builders/npm'
-#  args: ['run', 'build']
+    [[ "$_ENV" == "staging" ]] && npm run build-stg && echo "Deploying on staging..."  
 - name: 'gcr.io/$PROJECT_ID/firebase'
+  waitFor:
+  - build
   args: [ 'deploy', '--project', '$PROJECT_ID', '-P', '$_ENV']
   secretEnv: ['FIREBASE_TOKEN']
 secrets:
