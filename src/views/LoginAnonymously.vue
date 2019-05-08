@@ -1,10 +1,7 @@
 <template>
   <form class="login" @submit.prevent="onSubmit">
-    <h3>Login</h3>
-    <input type="text" v-model="email" placeholder="Email"><br>
-    <input type="password" v-model="password" placeholder="Password"><br>
+    <h3>Login (anonymously)</h3>
     <input type="submit" value="Login"/>
-    <p>You don't have an account ? You can <router-link to="/sign-up">create one</router-link></p>
   </form>
 </template>
 
@@ -17,12 +14,6 @@
         return this.$route.query.redirect || '/'
       }
     },
-    data() {
-      return {
-        email: '',
-        password: ''
-      }
-    },
     watch: {
       user (auth) {
         if(!!auth){
@@ -32,7 +23,7 @@
     },
     methods: {
       async onSubmit () {
-        const auth = await this.$auth.login(this.email, this.password)
+        const auth = await this.$auth.loginAnonymously()
       }
     }
   }

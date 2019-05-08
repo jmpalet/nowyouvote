@@ -2,10 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import FirebaseAuthPlugin from './plugins/FirebaseAuth'
+import FirebasePlugin from './plugins/Firebase'
 
-Vue.use(FirebaseAuthPlugin)
-
+Vue.use(FirebasePlugin)
 Vue.config.productionTip = false
 
 new Vue({

@@ -1,10 +1,8 @@
-import store from './../store'
+import store from '../store'
 import firebase from 'firebase/app';
 import 'firebase/app';
 import 'firebase/auth'
-// import 'firebase/firestore';
-
-console.log(process.env.NODE_ENV);
+import 'firebase/firestore';
 
 const config = {
     apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -18,8 +16,13 @@ const config = {
 export default {
   install: (Vue) => {  
     const app = firebase.initializeApp(config);
-    const auth = app.auth()
+    const auth = app.auth();
+    const db = app.firestore();
+
     Vue.prototype.$auth = {
+      loginAnonymously: async () => {
+        return await auth.signInAnonymously()
+      },
       login: async (username, pass) => {
         return await auth.signInWithEmailAndPassword(username, pass)
       },
@@ -29,7 +32,25 @@ export default {
       logout: async () => {
         await auth.signOut()
       }
-    }
+    },
+    Vue.prototype.$db = {
+      newPoll: async(title) => {
+        return await db.collection('polls').add({
+          title: title,
+          user: store.state.user.uid,
+          created: Date.now()
+        })
+      },
+      getPolls: () => {
+        return db.collection("polls").orderBy("created", 'desc').where("user", "==", store.state.user.uid).get()
+      },
+      getPoll: (id) => {
+        return db.collection("polls").doc(id).get()
+      },
+      deletePoll: (id) => {
+        return db.collection("polls").doc(id).delete()
+      },
+    },
     auth.onAuthStateChanged(user => {
       store.commit('updateUser',{ user })
     })

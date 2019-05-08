@@ -2,7 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Create from './views/Create.vue'
+import Polls from './views/Polls.vue'
+import Poll from './views/Poll.vue'
+import Profile from './views/Profile.vue'
 import Login from './views/Login.vue'
+import LoginAnonymously from './views/LoginAnonymously.vue'
 import SignUp from './views/SignUp.vue'
 import Logout from './views/Logout.vue'
 import store from './store'
@@ -23,6 +27,11 @@ const router = new Router({
       component: Login
     },
     {
+      path: '/login-anonymously',
+      name: 'login-anonymously',
+      component: LoginAnonymously
+    },
+    {
       path: '/sign-up',
       name: 'sign-up',
       component: SignUp
@@ -32,23 +41,38 @@ const router = new Router({
       name: 'create',
       component: Create,
       meta: {
-        authRequred: true
+        authRequired: true
       }
+    },
+    {
+      path: '/polls',
+      name: 'polls',
+      component: Polls,
+      meta: {
+        authRequired: true
+      }
+    },
+    {
+      path: '/poll/:id',
+      name: 'poll',
+      component: Poll
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile
     },
     {
       path: '/logout',
       name: 'logout',
-      component: Logout,
-      meta: {
-        authRequred: true
-      }
+      component: Logout
     }
   ]
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.authRequred)) {
-    if (!store.state.user) {
+  if (to.matched.some(record => record.meta.authRequired)) {
+    if (!store.state.user || (store.state.user && store.state.user.isAnonymous)) {
       next({
         path: '/login',
         query: { redirect: to.fullPath }

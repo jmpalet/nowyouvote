@@ -5,7 +5,8 @@
       <router-link to="/">Home</router-link>
       <router-link v-if="!user" to="/login">Login</router-link>
       <router-link v-if="!!user" to="/create">Create</router-link>
-      <router-link v-if="!!user" to="/logout">Logout</router-link>
+      <router-link v-if="!!user" to="/profile">Profile</router-link>
+      <router-link v-if="!!user" to="/polls">Polls</router-link>
     </div>
     <router-view/>
   </div>
@@ -13,6 +14,8 @@
 
 <script>
 import {mapState} from 'vuex'
+import store from './store'
+
 export default {
   computed: {
     ...mapState(['user'])
@@ -79,5 +82,15 @@ input[type=submit] {
   border: 0;
   color: white;
   padding: 16px;
+}
+
+button {
+  margin-top: 20px;
+  width: 10%;
+  cursor: pointer;
+}
+
+ul { 
+  list-style-type: none;
 }
 </style>
