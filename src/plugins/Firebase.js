@@ -41,14 +41,14 @@ export default {
           created: Date.now()
         })
       },
-      getPolls: () => {
-        return db.collection("polls").orderBy("created", 'desc').where("user", "==", store.state.user.uid).get()
+      getPolls: async () => {
+        return await db.collection("polls").orderBy("created", 'desc').where("user", "==", store.state.user.uid).get()
       },
-      getPoll: (id) => {
-        return db.collection("polls").doc(id).get()
+      getPoll: async (id) => {
+        return await db.collection("polls").doc(id).get()
       },
-      deletePoll: (id) => {
-        return db.collection("polls").doc(id).delete()
+      deletePoll: async (id) => {
+        return await db.collection("polls").doc(id).delete()
       },
     },
     auth.onAuthStateChanged(user => {

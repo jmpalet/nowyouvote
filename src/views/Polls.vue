@@ -1,6 +1,9 @@
 <template>
   <div class="polls">
-    <ul id="example-1">
+    <div v-if="loading" class="loading">
+      Loading...
+    </div>
+    <ul>
       <li v-for="poll in polls" v-bind:key="poll.id">
         <a :href="'/poll/' + poll.id">{{ poll.get('title') }}</a><button variant="danger" @click="deletePoll(poll.id)">Delete</button>
       </li>
@@ -10,31 +13,31 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 export default {
   name: 'create',
   data: () => {
     return {
+      loading: false,
       polls: [],
       message: null
     }
   },
   methods: {
     getPolls () {
-      var self = this;
+      this.loading = true;
       this.$db.getPolls(this.title).then((results) => {
+        this.loading = false;
         results.forEach((result) => {
-          self.polls.push(result);
+          this.polls.push(result);
         })
       });
     },
     deletePoll (id) {
-      var self = this;
       this.$db.deletePoll(id).then(() => {
-        self.polls = self.polls.filter(function(poll){
+        this.polls = this.polls.filter(function(poll){
             return poll.id != id;
         });
-        self.message = "Deleted!"
+        this.message = "Deleted!"
       });
     }
   },
