@@ -1,7 +1,11 @@
 <template>
-  <div class="poll">
-    {{poll}}
-  </div>
+  <v-container>
+    <v-layout text-xs-center wrap>
+      <v-flex mb-4>
+        {{poll}}
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -18,7 +22,8 @@ export default {
       var self = this;
       this.$db.getPoll(id).then((result) => {
         self.poll = {
-          title: result.get('title')
+          title: result.get('title'),
+          options: result.get('options')
         }
       });
     }

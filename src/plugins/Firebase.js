@@ -34,11 +34,12 @@ export default {
       }
     },
     Vue.prototype.$db = {
-      newPoll: async(title) => {
+      newPoll: async(title, options) => {
         return await db.collection('polls').add({
           title: title,
           user: store.state.user.uid,
-          created: Date.now()
+          created: Date.now(),
+          options: options
         })
       },
       getPolls: async () => {

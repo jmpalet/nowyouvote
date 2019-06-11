@@ -1,8 +1,12 @@
 <template>
-  <div class="create">
-    {{ user }}
-    <a href="/logout">Logout</a>
-  </div>
+  <v-container>
+    <v-layout text-xs-center wrap>
+      <v-flex mb-4>
+        {{ user }}
+        <a href="/logout">Logout</a>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
