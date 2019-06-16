@@ -11,7 +11,9 @@
             <v-icon>add</v-icon>
           </v-btn><br>
           <input type="submit" value="Create" v-if="!id"/>
-          <a :href="'/poll/' + id" v-if="id">{{id}}</a>
+          <router-link :to="{ name: 'poll', params: {id: id}}" v-if="id">
+            <a>{{id}}</a>
+          </router-link>
         </form>
       </v-flex>
     </v-layout>

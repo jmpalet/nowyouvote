@@ -2,7 +2,14 @@
   <v-container>
     <v-layout text-xs-center wrap>
       <v-flex mb-4>
-        {{poll}}
+        <div v-if="poll">
+          <h3 v-if="poll">{{poll.title}}</h3>
+          <div v-for="option in poll.options">
+            <input type="text" placeholder="Option" v-model="option.title" v-if="!id">
+            <button @click="voteUp()">👍</button>
+            <button @click="voteDown()">👎</button>
+          </div>
+        </div>
       </v-flex>
     </v-layout>
   </v-container>
@@ -14,6 +21,7 @@ export default {
   name: 'poll',
   data: () => {
     return {
+      id: null,
       poll: null,
     }
   },
@@ -29,7 +37,7 @@ export default {
     }
   },
   mounted() {
-      this.getPoll(this.$route.params.id);
+    this.getPoll(this.$route.params.id);
   }
 }
 </script>

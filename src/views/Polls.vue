@@ -7,7 +7,10 @@
         </div>
         <ul>
           <li v-for="poll in polls" v-bind:key="poll.id">
-            <a :href="'/poll/' + poll.id">{{ poll.get('title') }}</a><button variant="danger" @click="deletePoll(poll.id)">Delete</button>
+            <router-link :to="{ name: 'poll', params: {id: poll.id}}">
+              <a>{{poll.get('title')}}</a>
+            </router-link>
+            <button @click="deletePoll(poll.id)">Delete</button>
           </li>
         </ul>
         <p v-if="message">{{message}}</p>
