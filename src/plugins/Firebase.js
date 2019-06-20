@@ -1,5 +1,5 @@
 import store from '../store'
-import firebase from 'firebase/app';
+import firebase, { firestore } from 'firebase/app';
 import 'firebase/app';
 import 'firebase/auth'
 import 'firebase/firestore';
@@ -38,18 +38,42 @@ export default {
         return await db.collection('polls').add({
           title: title,
           user: store.state.user.uid,
-          created: Date.now(),
-          options: options
+          created: Date.now()
         })
+      },
+      vote: async(poll, option, vote) => {
+        return await db.collection('polls').doc(poll).collection('options').doc(option).collection('votes').add({user: store.state.user.uid, vote: vote})
+      },
+      newOption: async(id, title) => {
+        return await db.collection('polls').doc(id).collection('options').add({title: title})
       },
       getPolls: async () => {
         return await db.collection("polls").orderBy("created", 'desc').where("user", "==", store.state.user.uid).get()
+      },
+      getVotes: async (poll, option) => {
+        return await db.collection('polls').doc(poll).collection('options').doc(option).collection('votes').get().then((data) => {
+          let votes = {
+            positive: 0,
+            negative: 0
+          }
+          data.forEach(async (vote) => {
+            if(vote.get('vote') > 0) {
+              votes.positive += vote.get('vote')
+            } else {
+              votes.negative -= vote.get('vote')
+            }
+          })
+          return votes
+        })
       },
       getPoll: async (id) => {
         return await db.collection("polls").doc(id).get()
       },
       deletePoll: async (id) => {
         return await db.collection("polls").doc(id).delete()
+      },
+      getOptions: async (id) => {
+        return await db.collection("polls").doc(id).collection('options').get()
       },
     },
     auth.onAuthStateChanged(user => {

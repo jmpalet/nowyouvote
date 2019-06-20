@@ -10,12 +10,12 @@
     "build-stg": "vue-cli-service build --mode staging"
   },
   "dependencies": {
+    "@firebase/firestore": "^1.4.0",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.22",
     "core-js": "^2.6.5",
     "firebase": "^5.11.1",
     "vue": "^2.6.10",
-    "vue-firestore": "^0.3.21",
     "vue-router": "^3.0.3",
     "vuetify": "^1.5.5",
     "vuex": "^3.0.1"
