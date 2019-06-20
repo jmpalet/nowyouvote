@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: 'create',
+  name: 'polls',
   data: () => {
     return {
       loading: false,
@@ -32,6 +32,9 @@ export default {
   methods: {
     getPolls () {
       this.loading = true;
+      if (this.polls.length) {
+        return;
+      }
       this.$db.getPolls(this.title).then((results) => {
         this.loading = false;
         results.forEach((result) => {

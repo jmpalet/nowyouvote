@@ -3,7 +3,9 @@
     <v-layout text-xs-center wrap>
       <v-flex mb-4>
         {{ user }}
-        <a href="/logout">Logout</a>
+        <router-link to="logout">
+          <a>Logout</a>
+        </router-link>
       </v-flex>
     </v-layout>
   </v-container>
@@ -12,7 +14,7 @@
 <script>
 import store from '../store';
 export default {
-  name: 'create',
+  name: 'profile',
   data() {
     return {
       user: store.state.user

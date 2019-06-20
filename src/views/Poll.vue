@@ -4,10 +4,10 @@
       <v-flex mb-4>
         <div v-if="poll">
           <h3 v-if="poll">{{poll.title}}</h3>
-          <div v-for="option in poll.options">
-            <input type="text" placeholder="Option" v-model="option.title" v-if="!id">
-            <button @click="voteUp()">👍</button>
-            <button @click="voteDown()">👎</button>
+          <div v-for="(option, key) in poll.options">
+            {{ option.title }}
+            <button @click="voteUp(key)">👍{{option.votes.positive}}</button>
+            <button @click="voteDown(key)">👎{{option.votes.negative}}</button>
           </div>
         </div>
       </v-flex>
@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 export default {
   name: 'poll',
   data: () => {
@@ -26,18 +25,43 @@ export default {
     }
   },
   methods: {
-    getPoll (id) {
-      var self = this;
-      this.$db.getPoll(id).then((result) => {
-        self.poll = {
-          title: result.get('title'),
-          options: result.get('options')
+    voteUp (key) {
+      this.$db.vote(this.id, this.poll.options[key].id, 1).then((data) => {
+        this.refreshOption(key)
+      })
+    },
+    voteDown (key) {
+      this.$db.vote(this.id, this.poll.options[key].id, -1).then((data) => {
+        this.refreshOption(key)
+      })
+    },
+    refreshOption(key) {
+      this.$db.getVotes(this.id, this.poll.options[key].id).then((votes) => {
+        if ('votes' in this.poll.options[key]) {
+          this.poll.options[key].votes = votes
         }
-      });
+      })
+    },
+    getPoll (id) {
+      this.$db.getPoll(id).then((poll) => {
+        this.$db.getOptions(id).then((data) => {
+          let options = []
+          data.forEach(option => {
+            this.$db.getVotes(this.id, option.id).then((votes) => {
+              options.push({id: option.id, title: option.get('title'), votes: votes})
+            })
+          })
+          this.poll = {
+            title: poll.get('title'),
+            options: options
+          }
+        });
+      })
     }
   },
   mounted() {
-    this.getPoll(this.$route.params.id);
+    this.id = this.$route.params.id
+    this.getPoll(this.id);
   }
 }
 </script>
