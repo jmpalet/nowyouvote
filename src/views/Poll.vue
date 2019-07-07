@@ -6,8 +6,8 @@
           <h3 v-if="poll">{{poll.title}}</h3>
           <div v-for="(option, key) in sortedOptionsByScore">
             {{ option.title }}
-            <button @click="voteUp(key)">👍{{option.votes.positive}}</button>
-            <button @click="voteDown(key)">👎{{option.votes.negative}}</button>
+            <button :disabled="option.votes.user === 1" @click="voteUp(key)"><span>👍</span>{{option.votes.positive}}</button>
+            <button :disabled="option.votes.user === -1" @click="voteDown(key)"><span>👎</span>{{option.votes.negative}}</button>
           </div>
         </div>
       </v-flex>
@@ -49,9 +49,11 @@ export default {
       return (phat + z*z / (2*n) - z * Math.sqrt((phat * (1 - phat) + z*z / (4*n)) / n)) / (1 + z*z/n)
     },
     vote (key, vote) {
+      console.log('voting ' + key + ' ' + vote)
       this.$db.vote(this.id, this.poll.options[key].id, vote).then((data) => {
         this.refreshOption(key)
       }).catch(error => {
+        console.log(error)
         router.push({
           name: 'login',
           query: { redirect: this.$route.fullPath }
@@ -94,3 +96,11 @@ export default {
   }
 }
 </script>
+
+<style>
+button:disabled span,
+button[disabled] span{
+  color: transparent;  
+  text-shadow: 0 0 0 #ccc;
+}
+</style>

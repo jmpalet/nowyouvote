@@ -45,7 +45,16 @@ export default {
         if (store.state.user == null) {
           throw new Error('not logged in')
         }
-        return await db.collection('polls').doc(poll).collection('options').doc(option).collection('votes').add({user: store.state.user.uid, vote: vote})
+        return await db.collection('polls').doc(poll).collection('options').doc(option).collection('votes').where('user', '==', store.state.user.uid).get()
+          .then(function(querySnapshot) {
+            var batch = db.batch();
+            querySnapshot.forEach(function(doc) {
+              batch.delete(doc.ref);
+            });
+            return batch.commit();
+        }).then(() => {
+          return db.collection('polls').doc(poll).collection('options').doc(option).collection('votes').add({user: store.state.user.uid, vote: vote})
+        })
       },
       newOption: async(id, title) => {
         return await db.collection('polls').doc(id).collection('options').add({title: title})
@@ -57,13 +66,17 @@ export default {
         return await db.collection('polls').doc(poll).collection('options').doc(option).collection('votes').get().then((data) => {
           let votes = {
             positive: 0,
-            negative: 0
+            negative: 0,
+            user: null
           }
           data.forEach(async (vote) => {
             if(vote.get('vote') > 0) {
               votes.positive += vote.get('vote')
             } else {
               votes.negative -= vote.get('vote')
+            }
+            if (vote.get('user') === store.state.user.uid) {
+              votes.user = vote.get('vote')
             }
           })
           return votes
