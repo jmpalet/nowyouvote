@@ -5,11 +5,12 @@
         <div v-if="loading" class="loading">
           Loading...
         </div>
-        <ul>
+        <ul v-if="!loading">
           <li v-for="poll in polls" v-bind:key="poll.id">
             <router-link :to="{ name: 'poll', params: {id: poll.id}}">
               <a>{{poll.get('title')}}</a>
             </router-link>
+            {{poll.id}}
             <button @click="deletePoll(poll.id)">Delete</button>
           </li>
         </ul>
@@ -24,7 +25,7 @@ export default {
   name: 'polls',
   data: () => {
     return {
-      loading: false,
+      loading: true,
       polls: [],
       message: null
     }
@@ -36,10 +37,10 @@ export default {
         return;
       }
       this.$db.getPolls(this.title).then((results) => {
-        this.loading = false;
         results.forEach((result) => {
           this.polls.push(result);
         })
+        this.loading = false;
       });
     },
     deletePoll (id) {

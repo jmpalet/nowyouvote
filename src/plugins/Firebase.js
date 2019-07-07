@@ -42,6 +42,9 @@ export default {
         })
       },
       vote: async(poll, option, vote) => {
+        if (store.state.user == null) {
+          throw new Error('not logged in')
+        }
         return await db.collection('polls').doc(poll).collection('options').doc(option).collection('votes').add({user: store.state.user.uid, vote: vote})
       },
       newOption: async(id, title) => {
