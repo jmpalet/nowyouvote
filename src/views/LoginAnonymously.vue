@@ -16,7 +16,7 @@
     },
     watch: {
       user (auth) {
-        if(!!auth){
+        if(auth){
             this.$router.replace(this.nextRoute)
         }
       }
