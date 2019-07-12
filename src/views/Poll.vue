@@ -6,8 +6,8 @@
           <h3 v-if="poll">{{poll.title}}</h3>
           <div v-for="(option, key) in sortedOptionsByScore">
             {{option.title}}
-            <button v-bind:class="{ voted: option.votes.user === 1 }" @click="voteUp(key)"><span>👍</span>{{option.votes.positive}}</button>
-            <button v-bind:class="{ voted: option.votes.user === -1 }" @click="voteDown(key)"><span>👎</span>{{option.votes.negative}}</button>
+            <button @click="voteUp(key)"><i v-bind:class="{ 'material-icons-outlined': option.votes.user !== 1, 'material-icons': option.votes.user === 1 }">thumb_up</i> {{option.votes.positive}}</button>
+            <button @click="voteDown(key)"><i v-bind:class="{ 'material-icons-outlined': option.votes.user !== -1, 'material-icons': option.votes.user === -1 }">thumb_down</i> {{option.votes.negative}}</button>
           </div>
         </div>
       </v-flex>
@@ -30,7 +30,7 @@ export default {
     sortedOptionsByScore() {
       return this.poll.options.sort((a,b) => {
         if ('score' in a && 'score' in b) {
-          return a.score < b.score
+          return b.score - a.score
         }
       })
     }
@@ -96,8 +96,11 @@ export default {
 </script>
 
 <style>
-button.voted span{
-  color: transparent;  
-  text-shadow: 0 0 0 #ccc;
+button{
+  color:  #039be5;
+}
+.material-icons, .material-icons-outlined{
+  font-size: 16px;
+  color: #039be5;
 }
 </style>

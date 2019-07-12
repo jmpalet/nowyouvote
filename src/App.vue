@@ -34,6 +34,9 @@ export default {
 </script>
 
 <style>
+* {
+	outline: none !important;
+}
 .headline {
   padding-top: 14px;
 }
