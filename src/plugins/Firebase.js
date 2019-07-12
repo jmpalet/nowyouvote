@@ -1,5 +1,5 @@
 import store from '../store'
-import firebase, { firestore } from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/app';
 import 'firebase/auth'
 import 'firebase/firestore';
@@ -34,7 +34,7 @@ export default {
       }
     },
     Vue.prototype.$db = {
-      newPoll: async(title, options) => {
+      newPoll: async(title) => {
         return await db.collection('polls').add({
           title: title,
           user: store.state.user.uid,
