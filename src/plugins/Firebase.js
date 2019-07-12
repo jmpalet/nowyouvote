@@ -45,16 +45,25 @@ export default {
         if (store.state.user == null) {
           throw new Error('not logged in')
         }
-        return await db.collection('polls').doc(poll).collection('options').doc(option).collection('votes').where('user', '==', store.state.user.uid).get()
+        return await db.collection('polls').doc(poll).collection('options').doc(option).collection('votes').where('user', '==', store.state.user.uid).get()        
           .then(function(querySnapshot) {
-            var batch = db.batch();
+            let batch = db.batch();
+            let removed = false;
+            let exists = false;
             querySnapshot.forEach(function(doc) {
+              if(doc.get('vote') === vote) {
+                exists = true;
+              }
               batch.delete(doc.ref);
+              removed = true;
             });
-            return batch.commit();
-        }).then(() => {
-          return db.collection('polls').doc(poll).collection('options').doc(option).collection('votes').add({user: store.state.user.uid, vote: vote})
-        })
+            if (removed) {
+              batch.commit();
+            }
+            if((removed && !exists) || !removed) {
+              return db.collection('polls').doc(poll).collection('options').doc(option).collection('votes').add({user: store.state.user.uid, vote: vote})
+            }
+          })
       },
       newOption: async(id, title) => {
         return await db.collection('polls').doc(id).collection('options').add({title: title})
