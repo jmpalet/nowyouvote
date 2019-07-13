@@ -4,7 +4,7 @@
     <input type="text" v-model="email" placeholder="Email"><br>
     <input type="password" v-model="password" placeholder="Password"><br>
     <input type="submit" value="Sign up"/>
-    <p>or go back to <router-link to="/login">login</router-link></p>
+    <p>or go back to <router-link :to="{ name: 'login', query: { redirect: this.nextRoute }}">login</router-link></p>
   </form>
 </template>
 

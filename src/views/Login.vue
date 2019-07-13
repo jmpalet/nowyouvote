@@ -4,7 +4,7 @@
     <input type="text" v-model="email" placeholder="Email"><br>
     <input type="password" v-model="password" placeholder="Password"><br>
     <input type="submit" value="Login"/>
-    <p>You don't have an account ? You can <router-link to="/sign-up">create one</router-link></p>
+    <p>You don't have an account ? You can <router-link :to="{ name: 'sign-up', query: { redirect: this.nextRoute }}">create one</router-link></p>
   </form>
 </template>
 
