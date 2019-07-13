@@ -100,7 +100,7 @@ input[type=submit] {
   text-decoration: none;
   border: 0;
   color: white;
-  padding: 16px;
+  padding: 10px;
 }
 
 button {
@@ -111,6 +111,22 @@ button {
 
 ul { 
   list-style-type: none;
+}
+
+.login {
+  margin-top: 40px;
+}
+.login input {
+  margin: 10px 0;
+  padding: 15px;
+}
+p {
+  margin-top: 40px;
+  font-size: 13px;
+}
+p a {
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>
 

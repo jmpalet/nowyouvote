@@ -1,11 +1,13 @@
 <template>
-  <form class="login" @submit.prevent="onSubmit">
-    <h3>Login</h3>
-    <input type="text" v-model="email" placeholder="Email"><br>
-    <input type="password" v-model="password" placeholder="Password"><br>
-    <input type="submit" value="Login"/>
-    <p>You don't have an account ? You can <router-link :to="{ name: 'sign-up', query: { redirect: this.nextRoute }}">create one</router-link></p>
-  </form>
+  <v-container>
+    <form class="login" @submit.prevent="onSubmit">
+      <h3>Login</h3>
+      <input type="text" v-model="email" placeholder="Email"><br>
+      <input type="password" v-model="password" placeholder="Password"><br>
+      <input type="submit" value="Login"/>
+      <p>You don't have an account ? You can <router-link :to="{ name: 'sign-up', query: { redirect: this.nextRoute }}">create one</router-link></p>
+    </form>
+  </v-container>
 </template>
 
 <script>
@@ -37,22 +39,3 @@
     }
   }
 </script>
-
-<style scoped>  /* "scoped" attribute limit the CSS to this component only */
-  .login {
-    margin-top: 40px;
-  }
-  input {
-    margin: 10px 0;
-    width: 20%;
-    padding: 15px;
-  }
-  p {
-    margin-top: 40px;
-    font-size: 13px;
-  }
-  p a {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-</style>

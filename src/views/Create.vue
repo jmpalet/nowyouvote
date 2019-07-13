@@ -5,7 +5,7 @@
         <form class="create" @submit.prevent="onSubmit">
           <input type="text" v-model="title" placeholder="Title" v-if="!id"><br>
           <div v-for="(option, key) in options" v-if="!id">
-            <input type="text" placeholder="Option" v-model="option.title" v-if="!id">
+            <input type="text" placeholder="Option" v-model="option.title" v-if="!id" @keydown.tab="options.push({})">
             <v-icon @click="options.push({})" v-if="key == options.length-1">add_circle_outline</v-icon>
             <v-icon @click="options.pop()" v-if="key == options.length-1 && options.length > 1">remove_circle_outline</v-icon>
           </div>
@@ -31,19 +31,22 @@ export default {
     }
   },
   methods: {
-      async onSubmit () {
-        await this.$db.newPoll(this.title).then((data) => {
-          console.log(data.id)
-          this.id = data.id
-          this.options.forEach(async (option) => {
-            if ('title' in option) {
-              await this.$db.newOption(data.id, option.title).then((data) => {
-                console.log(data.id)
-              })
-            }
-          })
+    test (test) {
+      console.log(test)
+    },
+    async onSubmit () {
+      await this.$db.newPoll(this.title).then((data) => {
+        console.log(data.id)
+        this.id = data.id
+        this.options.forEach(async (option) => {
+          if ('title' in option) {
+            await this.$db.newOption(data.id, option.title).then((data) => {
+              console.log(data.id)
+            })
+          }
         })
-      }
+      })
     }
+  }
 }
 </script>

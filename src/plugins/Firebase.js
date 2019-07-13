@@ -84,8 +84,10 @@ export default {
             } else {
               votes.negative -= vote.get('vote')
             }
-            if (vote.get('user') === store.state.user.uid) {
-              votes.user = vote.get('vote')
+            if ('user' in store.state && store.state.user !== null) {
+              if (vote.get('user') === store.state.user.uid) {
+                votes.user = vote.get('vote')
+              }
             }
           })
           return votes

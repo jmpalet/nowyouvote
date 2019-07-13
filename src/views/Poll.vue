@@ -9,6 +9,9 @@
             <button @click="voteUp(key)"><i v-bind:class="{ 'material-icons-outlined': option.votes.user !== 1, 'material-icons': option.votes.user === 1 }">thumb_up</i> {{option.votes.positive}}</button>
             <button @click="voteDown(key)"><i v-bind:class="{ 'material-icons-outlined': option.votes.user !== -1, 'material-icons': option.votes.user === -1 }">thumb_down</i> {{option.votes.negative}}</button>
           </div>
+          <div v-if="user">
+            <input type="text" placeholder="Add option" v-model="newOption" @keyup.enter="addOption(newOption)"/><v-icon @click="addOption(newOption)">check</v-icon>
+          </div>
         </div>
       </v-flex>
     </v-layout>
@@ -16,6 +19,7 @@
 </template>
 
 <script>
+import store from '../store';
 import router from '../router'
 import stats from 'simple-statistics'
 export default {
@@ -24,6 +28,8 @@ export default {
     return {
       id: null,
       poll: null,
+      newOption: "",
+      user: store.state.user
     }
   },
   computed: {
@@ -85,6 +91,12 @@ export default {
             options: options
           }
         });
+      })
+    },
+    async addOption (newOption) {
+      await this.$db.newOption(this.id, newOption).then((data) => {
+        this.poll.options.push({id: data.id, title: newOption, votes:{positive: 0, negative: 0}, score: 0})
+        this.newOption = ""
       })
     }
   },
