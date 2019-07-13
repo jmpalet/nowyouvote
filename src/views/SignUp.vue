@@ -34,7 +34,7 @@
     },
     methods: {
       async onSubmit () {
-        const auth = await this.$auth.signup(this.email, this.password)
+        await this.$auth.signup(this.email, this.password)
       }
     }
   }

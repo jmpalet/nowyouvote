@@ -23,7 +23,7 @@
     },
     methods: {
       async onSubmit () {
-        const auth = await this.$auth.loginAnonymously()
+        await this.$auth.loginAnonymously()
       }
     }
   }
