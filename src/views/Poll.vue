@@ -91,7 +91,7 @@ export default {
       var negative = 0;
       var userVote = null;
       this.options[key].votes.forEach((vote) => {
-        if (vote.user === this.user.uid) {
+        if (this.user && vote.user === this.user.uid) {
           userVote = vote.vote
         }
         if (vote.vote > 0) {
