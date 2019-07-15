@@ -52,7 +52,6 @@ export default {
       return (phat + z*z / (2*n) - z * Math.sqrt((phat * (1 - phat) + z*z / (4*n)) / n)) / (1 + z*z/n)
     },
     vote (optionId, vote) {
-      console.log('vote')
       this.$db.vote(this.id, optionId, vote).catch(() => {
         router.push({
           name: 'login',
@@ -68,9 +67,13 @@ export default {
     getOptions (pollId) {
       this.$db.getOptions(pollId).onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
+          var key = this.getIdxByOptionId(doc.id)
+          if (key<0) {
+            key = this.options.length
+          }
           var data = doc.data()
           data.id = doc.id
-          this.options.push(data)
+          this.$set(this.options, key, data)
           this.getVotes(this.id, doc.id)
         });
       })
