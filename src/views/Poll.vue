@@ -1,25 +1,21 @@
 <template>
   <v-container>
-    <v-layout text-xs-center wrap>
-      <v-flex mb-4>
-        <div v-if="poll">
-          <h3 v-if="poll">{{poll.title}}</h3>
-          <div v-for="(option, key) in sortedOptionsByScore">
-            {{option.title}}
-            <button @click="voteUp(key)"><i v-bind:class="{ 'material-icons-outlined': option.votes.user !== 1, 'material-icons': option.votes.user === 1 }">thumb_up</i> {{option.votes.positive}}</button>
-            <button @click="voteDown(key)"><i v-bind:class="{ 'material-icons-outlined': option.votes.user !== -1, 'material-icons': option.votes.user === -1 }">thumb_down</i> {{option.votes.negative}}</button>
-          </div>
-          <div v-if="user">
-            <input type="text" placeholder="Add option" v-model="newOption" @keyup.enter="addOption(newOption)"/><v-icon @click="addOption(newOption)">check</v-icon>
-          </div>
-        </div>
-      </v-flex>
-    </v-layout>
+    <div v-if="Object.keys(options).length>0">
+      <h3 v-if="poll">{{poll.title}}</h3>
+      <div v-for="option in sortedOptionsByScore" v-if="option.processedVotes">
+        {{option.title}}
+        <button @click="voteUp(option.id)"><i v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== 1, 'material-icons': option.processedVotes.user === 1 }">thumb_up</i> {{option.processedVotes.positive}}</button>
+        <button @click="voteDown(option.id)"><i v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== -1, 'material-icons': option.processedVotes.user === -1 }">thumb_down</i> {{option.processedVotes.negative}}</button>
+      </div>
+      <div v-if="user">
+        <input type="text" placeholder="Add option" v-model="newOption" @keyup.enter="addOption(newOption)"/><v-icon @click="addOption(newOption)">check</v-icon>
+      </div>
+    </div>
   </v-container>
 </template>
 
 <script>
-import store from '../store';
+import {mapGetters} from 'vuex'
 import router from '../router'
 import stats from 'simple-statistics'
 export default {
@@ -28,25 +24,26 @@ export default {
     return {
       id: null,
       poll: null,
+      options: [],
       newOption: "",
-      user: store.state.user
     }
   },
   computed: {
+    ...mapGetters(['user']),
     sortedOptionsByScore() {
-      return this.poll.options.sort((a,b) => {
-        if ('score' in a && 'score' in b) {
-          return b.score - a.score
+      return this.options.sort((a,b) => {
+        if ('processedVotes' in a && 'processedVotes' in b) {
+          return b.processedVotes.score - a.processedVotes.score
         }
       })
     }
   },
   methods: {
-    voteUp (key) {
-      this.vote(key, 1)
+    voteUp (optionId) {
+      this.vote(optionId, 1)
     },
-    voteDown (key) {
-      this.vote(key, -1)
+    voteDown (optionId) {
+      this.vote(optionId, -1)
     },
     score (upvotes, n = 0, confidence = 0.95) {
       if (n === 0) return 0
@@ -54,55 +51,78 @@ export default {
       const phat = 1.0 * upvotes / n
       return (phat + z*z / (2*n) - z * Math.sqrt((phat * (1 - phat) + z*z / (4*n)) / n)) / (1 + z*z/n)
     },
-    vote (key, vote) {
-      this.$db.vote(this.id, this.poll.options[key].id, vote).then(() => {
-        this.refreshOption(key)
-      }).catch(() => {
+    vote (optionId, vote) {
+      console.log('vote')
+      this.$db.vote(this.id, optionId, vote).catch(() => {
         router.push({
           name: 'login',
           query: { redirect: this.$route.fullPath }
         })
       })
     },
-    refreshOption(key) {
-      this.$db.getVotes(this.id, this.poll.options[key].id).then((votes) => {
-        if ('votes' in this.poll.options[key]) {
-          this.poll.options[key].votes = votes
-          this.poll.options[key].score = this.score(votes.positive, votes.positive + votes.negative)
-        }
+    getPoll (pollId) {
+      this.$db.getPoll(pollId).onSnapshot((doc) => {
+        this.poll = doc.data()
       })
     },
-    getPoll (id) {
-      this.$db.getPoll(id).then((poll) => {
-        this.$db.getOptions(id).then((data) => {
-          let options = []
-          data.forEach(option => {
-            this.$db.getVotes(this.id, option.id).then((votes) => {
-              options.push({
-                id: option.id,
-                title: option.get('title'),
-                votes: votes,
-                score: this.score(votes.positive, votes.positive + votes.negative)
-              })
-            })
-          })
-          this.poll = {
-            title: poll.get('title'),
-            options: options
-          }
+    getOptions (pollId) {
+      this.$db.getOptions(pollId).onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          var data = doc.data()
+          data.id = doc.id
+          this.options.push(data)
+          this.getVotes(this.id, doc.id)
         });
       })
     },
+    getVotes (pollId, optionId) {
+      this.$db.getVotes(pollId, optionId).onSnapshot((querySnapshot) => {
+        var votes = [];
+        querySnapshot.forEach((doc) => {
+            votes.push(doc.data());
+        });
+        var key = this.getIdxByOptionId(optionId)
+        this.$set(this.options[key], "votes", votes)
+        this.$set(this.options[key], "processedVotes", this.processVotes(key))
+      })
+    },
+    processVotes(key) {
+      var positive = 0;
+      var negative = 0;
+      var userVote = null;
+      this.options[key].votes.forEach((vote) => {
+        if (vote.user === this.user.uid) {
+          userVote = vote.vote
+        }
+        if (vote.vote > 0) {
+          positive++
+        }
+        if (vote.vote < 0) {
+          negative++
+        }
+      })
+      return {
+        user: userVote,
+        positive: positive,
+        negative: negative,
+        score: this.score(positive, positive + negative)
+      }
+    },
     async addOption (newOption) {
-      await this.$db.newOption(this.id, newOption).then((data) => {
-        this.poll.options.push({id: data.id, title: newOption, votes:{positive: 0, negative: 0}, score: 0})
+      await this.$db.newOption(this.id, newOption).then(() => {
         this.newOption = ""
+      })
+    },
+    getIdxByOptionId(optionId) {
+      return this.options.findIndex((option) => {
+        return option.id == optionId
       })
     }
   },
   mounted() {
     this.id = this.$route.params.id
-    this.getPoll(this.id);
+    this.getPoll(this.id)
+    this.getOptions(this.id)
   }
 }
 </script>

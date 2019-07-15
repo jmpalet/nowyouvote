@@ -44,7 +44,7 @@ export default {
       });
     },
     deletePoll (id) {
-      this.$db.deletePoll(id).then(() => {
+      this.$db.getPoll(id).delete().then(() => {
         this.polls = this.polls.filter(function(poll){
             return poll.id != id;
         });

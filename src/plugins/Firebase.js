@@ -71,36 +71,14 @@ export default {
       getPolls: async () => {
         return await db.collection("polls").orderBy("created", 'desc').where("user", "==", store.state.user.uid).get()
       },
-      getVotes: async (poll, option) => {
-        return await db.collection('polls').doc(poll).collection('options').doc(option).collection('votes').get().then((data) => {
-          let votes = {
-            positive: 0,
-            negative: 0,
-            user: null
-          }
-          data.forEach(async (vote) => {
-            if(vote.get('vote') > 0) {
-              votes.positive += vote.get('vote')
-            } else {
-              votes.negative -= vote.get('vote')
-            }
-            if ('user' in store.state && store.state.user !== null) {
-              if (vote.get('user') === store.state.user.uid) {
-                votes.user = vote.get('vote')
-              }
-            }
-          })
-          return votes
-        })
+      getVotes: (poll, option) => {
+        return db.collection('polls').doc(poll).collection('options').doc(option).collection('votes')
       },
-      getPoll: async (id) => {
-        return await db.collection("polls").doc(id).get()
+      getPoll: (id) => {
+        return db.collection("polls").doc(id)
       },
-      deletePoll: async (id) => {
-        return await db.collection("polls").doc(id).delete()
-      },
-      getOptions: async (id) => {
-        return await db.collection("polls").doc(id).collection('options').get()
+      getOptions: (id) => {
+        return db.collection("polls").doc(id).collection('options')
       },
     },
     auth.onAuthStateChanged(user => {
