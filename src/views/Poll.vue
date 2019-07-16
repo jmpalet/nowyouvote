@@ -1,17 +1,22 @@
 <template>
-  <v-container>
-    <div v-if="Object.keys(options).length>0">
-      <h3 v-if="poll">{{poll.title}}</h3>
-      <div v-for="option in sortedOptionsByScore" v-if="option.processedVotes">
-        {{option.title}}
-        <button @click="voteUp(option.id)"><i v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== 1, 'material-icons': option.processedVotes.user === 1 }">thumb_up</i> {{option.processedVotes.positive}}</button>
-        <button @click="voteDown(option.id)"><i v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== -1, 'material-icons': option.processedVotes.user === -1 }">thumb_down</i> {{option.processedVotes.negative}}</button>
-      </div>
-      <div v-if="user">
-        <input type="text" placeholder="Add option" v-model="newOption" @keyup.enter="addOption(newOption)"/><v-icon @click="addOption(newOption)">check</v-icon>
-      </div>
-    </div>
-  </v-container>
+  <v-layout>
+    <v-list style="background: transparent">
+      <v-list-tile v-for="option in sortedOptionsByScore" :key="option.title">
+        <v-list-tile-action style="align-items: center; flex-direction: row;">
+          <v-btn flat icon color="#039be5"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== 1, 'material-icons': option.processedVotes.user === 1 }">thumb_up</v-icon><span class="votes">{{option.processedVotes.positive}}</span></v-btn>
+          <v-btn flat icon color="#039be5"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== -1, 'material-icons': option.processedVotes.user === -1 }">thumb_down</v-icon><span class="votes">{{option.processedVotes.negative}}</span></v-btn>
+        </v-list-tile-action>
+        <v-list-tile-content style="align-items: center">
+          <v-list-tile-title v-text="option.title"></v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile v-if="user">
+        <v-list-tile-content style="flex-direction: row;">
+          <input type="text" placeholder="Add option" v-model="newOption" @keyup.enter="addOption(newOption)"/><v-icon @click="addOption(newOption)">check</v-icon>
+        </v-list-tile-content>
+      </v-list-tile>
+    </v-list>
+  </v-layout>
 </template>
 
 <script>
@@ -35,6 +40,8 @@ export default {
         if ('processedVotes' in a && 'processedVotes' in b) {
           return b.processedVotes.score - a.processedVotes.score
         }
+      }).filter(option => {
+        return 'title' in option && 'processedVotes' in option
       })
     }
   },
@@ -66,6 +73,7 @@ export default {
     },
     getOptions (pollId) {
       this.$db.getOptions(pollId).onSnapshot((querySnapshot) => {
+        this.options = []
         querySnapshot.forEach((doc) => {
           var key = this.getIdxByOptionId(doc.id)
           if (key<0) {
@@ -130,12 +138,18 @@ export default {
 }
 </script>
 
-<style>
-button{
-  color:  #039be5;
+<style scoped>
+.v-list__tile__action {
+  min-width: 100px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 20px;
 }
-.material-icons, .material-icons-outlined{
-  font-size: 16px;
-  color: #039be5;
+.v-list__tile__action .v-btn__content .votes {
+  font-size: 14pt;
+  padding: 0 5px;
+}
+.v-list__tile__content {
+  font-size: 14pt
 }
 </style>

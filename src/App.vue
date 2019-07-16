@@ -1,24 +1,48 @@
 <template>
-  <v-app>
-    <v-toolbar app>
+  <v-app id="nowyouvote">
+    <v-toolbar app absolute>
       <v-toolbar-title class="headline">
         <router-link class="logo" to="/">
           <h1 class="logo"><span class="logo-1">now</span><span class="logo-2">you</span><span class="logo-3">vote</span><span class="logo-4">.com</span></h1>
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <div id="nav">
-        <router-link to="/">Home</router-link>
-        <router-link v-if="!user" to="/login">Login</router-link>
-        <router-link v-if="!!user" to="/create">Create</router-link>
-        <router-link v-if="!!user" to="/profile">Profile</router-link>
-        <router-link v-if="!!user" to="/polls">Polls</router-link>
-      </div>
+      <v-toolbar-items class="hidden-sm-and-down">
+        <v-btn v-for="item in menu" :key="item.icon" :to="item.path" flat>
+          <v-icon>{{item.icon}}</v-icon>
+          <span>{{ item.title }}</span>
+        </v-btn>
+      </v-toolbar-items>
+      <v-menu class="hidden-md-and-up" v-if="this.$vuetify.breakpoint.name != 'xs'">
+        <v-toolbar-side-icon slot="activator"></v-toolbar-side-icon>
+        <v-list>
+          <v-list-tile v-for="item in menu" :key="item.icon">
+            <router-link :to="item.path">
+              <v-list-tile-content>
+                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+              </v-list-tile-content>
+            </router-link>
+          </v-list-tile>   
+        </v-list>
+      </v-menu>
     </v-toolbar>
 
     <v-content>
       <router-view/>
     </v-content>
+    <v-bottom-nav
+      v-if="this.$vuetify.breakpoint.name == 'xs' && !!user"
+      :value="true"
+      fixed
+      color="white"
+    >
+      <router-link v-for="item in bottomMenu" :key="item.icon" :to="item.path">
+        <v-btn flat>
+          <span>{{item.title}}</span>
+          <v-icon>{{item.icon}}</v-icon>
+        </v-btn>
+      </router-link>
+    </v-bottom-nav>
   </v-app>
 </template>
 
@@ -27,15 +51,32 @@ import {mapState} from 'vuex'
 
 export default {
   computed: {
-    ...mapState(['user'])
+    ...mapState(['user']),
+    menu() {
+      var menu = [
+        { icon: 'vpn_key', title: 'Login', path: '/login', show: !this.user },
+        { icon: 'add_box', title: 'New poll', path: '/create', show: !!this.user },
+        { icon: 'view_headline', title: 'My polls', path: '/polls', show: !!this.user },
+        { icon: 'exit_to_app', title: 'Logout', path: '/logout', show: !!this.user },
+      ]
+      return menu.filter((item) => {
+        return item.show
+      })
+    },
+  },
+  data: () => {
+    return {
+      bottomMenu: [
+        { icon: 'add_box', title: 'New poll', path: '/create'},
+        { icon: 'view_headline', title: 'My polls', path: '/polls'},
+        { icon: 'person', title: 'Profile', path: '/profile'},
+      ]
+    }
   }
 }
 </script>
 
 <style>
-* {
-	outline: none !important;
-}
 .headline {
   padding-top: 14px;
 }
@@ -48,24 +89,19 @@ h1.logo {
   color: rgba(0,0,0,0.6);
   margin: 0 0 22px;
 }
-
 h1.logo .logo-1 {
   color:#5c5c5c;
 }
-
 h1.logo .logo-2 {
   color:#3c3c3c;
   font-weight: bold;
 }
-
 h1.logo .logo-3 {
   color:#1c1c1c;
 }
-
 h1.logo .logo-4 {
   color:#9c9c9c;
 }
-
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -73,25 +109,6 @@ h1.logo .logo-4 {
   text-align: center;
   color: #2c3e50;
 }
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #7c7c7c;
-  padding: 0 10px;
-  border-right: 1px solid;
-}
-
-#nav a:last-child {
-  border-right: 0px;
-}
-
-#nav a.router-link-exact-active {
-  color: #3c3c3c;
-}
-
 input[type=submit] {
   text-align: center;
   background: #039be5;
@@ -101,17 +118,14 @@ input[type=submit] {
   color: white;
   padding: 10px;
 }
-
 button {
   margin-top: 20px;
   width: 10%;
   cursor: pointer;
 }
-
 ul { 
   list-style-type: none;
 }
-
 .login {
   margin-top: 40px;
 }
@@ -123,9 +137,11 @@ p {
   margin-top: 40px;
   font-size: 13px;
 }
-p a {
-  text-decoration: underline;
-  cursor: pointer;
+a {
+  color: #039be5;
+}
+a {
+  text-decoration: none;
 }
 </style>
 
