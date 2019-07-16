@@ -30,7 +30,7 @@
     <v-content>
       <router-view/>
     </v-content>
-    <v-bottom-nav
+    <v-bottom-nav app
       v-if="this.$vuetify.breakpoint.name == 'xs' && !!user"
       :value="true"
       fixed
@@ -142,6 +142,23 @@ a {
 }
 a {
   text-decoration: none;
+}
+.v-list__tile__action {
+  min-width: 100px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 20px;
+}
+.v-list__tile__action .v-btn__content .votes {
+  font-size: 14pt;
+  padding: 0 5px;
+}
+.v-list__tile__content {
+  align-items: center;
+  font-size: 14pt
+}
+.v-list__tile__content, .v-list__tile__action {
+  flex-direction: row;
 }
 </style>
 

@@ -1,18 +1,16 @@
 <template>
-  <v-container>
-    <v-layout text-xs-center wrap>
-      <v-flex mb-4>
-        <ul>
-          <li v-for="poll in polls" v-bind:key="poll.id">
-            <router-link :to="{ name: 'poll', params: {id: poll.id}}">
-              <a>{{poll.title}}</a>
-            </router-link>
-            <button @click="deletePoll(poll.id)">Delete</button>
-          </li>
-        </ul>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <v-layout>
+    <v-list>
+      <v-list-tile v-for="poll in polls" v-bind:key="poll.id">
+        <v-list-tile-action>
+          <v-btn flat color="#039be5" @click="deletePoll(poll.id)"><v-icon medium>close</v-icon>Delete</v-btn>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile router :to="{name: 'poll', params: {id: poll.id}}" exact>{{poll.title}}</v-list-tile>
+        </v-list-tile-content>
+      </v-list-tile>
+    </v-list>
+  </v-layout>
 </template>
 
 <script>

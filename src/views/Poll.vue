@@ -1,18 +1,23 @@
 <template>
   <v-layout>
-    <v-list style="background: transparent">
+    <v-list>
       <v-list-tile v-for="option in sortedOptionsByScore" :key="option.title">
-        <v-list-tile-action style="align-items: center; flex-direction: row;">
-          <v-btn flat icon color="#039be5"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== 1, 'material-icons': option.processedVotes.user === 1 }">thumb_up</v-icon><span class="votes">{{option.processedVotes.positive}}</span></v-btn>
-          <v-btn flat icon color="#039be5"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== -1, 'material-icons': option.processedVotes.user === -1 }">thumb_down</v-icon><span class="votes">{{option.processedVotes.negative}}</span></v-btn>
+        <v-list-tile-action>
+          <v-btn flat icon color="#039be5" @click="voteUp(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== 1, 'material-icons': option.processedVotes.user === 1 }">thumb_up</v-icon><span class="votes">{{option.processedVotes.positive}}</span></v-btn>
+          <v-btn flat icon color="#039be5" @click="voteDown(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== -1, 'material-icons': option.processedVotes.user === -1 }">thumb_down</v-icon><span class="votes">{{option.processedVotes.negative}}</span></v-btn>
         </v-list-tile-action>
-        <v-list-tile-content style="align-items: center">
+        <v-list-tile-content>
           <v-list-tile-title v-text="option.title"></v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
       <v-list-tile v-if="user">
-        <v-list-tile-content style="flex-direction: row;">
-          <input type="text" placeholder="Add option" v-model="newOption" @keyup.enter="addOption(newOption)"/><v-icon @click="addOption(newOption)">check</v-icon>
+        <v-list-tile-action>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <input type="text" placeholder="Add option" v-model="newOption" @keyup.enter="addOption(newOption)"/>
+          <v-btn @click="addOption(newOption)">
+            <v-icon>check</v-icon>Add
+          </v-btn>
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
@@ -150,6 +155,9 @@ export default {
   padding: 0 5px;
 }
 .v-list__tile__content {
-  font-size: 14pt
+  align-items: center;
+}
+.v-list__tile__content, .v-list__tile__action {
+  flex-direction: row;
 }
 </style>
