@@ -1,13 +1,17 @@
 <template>
-  <v-container>
-    <form class="login" @submit.prevent="onSubmit">
-      <h3>Login</h3>
-      <input type="text" v-model="email" placeholder="Email"><br>
-      <input type="password" v-model="password" placeholder="Password"><br>
-      <input type="submit" value="Login"/>
-      <p>You don't have an account ? You can <router-link :to="{ name: 'sign-up', query: { redirect: this.nextRoute }}">create one</router-link></p>
-    </form>
-  </v-container>
+  <v-card>
+    <v-card-text>
+      <v-form>
+        <v-text-field prepend-icon="person" v-model="email" name="login" label="Login" type="text"></v-text-field>
+        <v-text-field prepend-icon="lock" v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
+      </v-form>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn color="primary" @click="onSubmit">Login</v-btn>
+      <v-card-text>You don't have an account ? You can <router-link :to="{ name: 'sign-up', query: { redirect: this.nextRoute }}">create one</router-link></v-card-text>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>

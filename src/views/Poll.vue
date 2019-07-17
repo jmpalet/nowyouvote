@@ -1,27 +1,42 @@
 <template>
-  <v-layout>
+  <v-card flat>
+    <v-card-title primary-title>
+      <div class="headline">{{poll.title}}</div>
+    </v-card-title>
     <v-list>
       <v-list-tile v-for="option in sortedOptionsByScore" :key="option.title">
         <v-list-tile-action>
-          <v-btn flat icon color="#039be5" @click="voteUp(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== 1, 'material-icons': option.processedVotes.user === 1 }">thumb_up</v-icon><span class="votes">{{option.processedVotes.positive}}</span></v-btn>
-          <v-btn flat icon color="#039be5" @click="voteDown(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== -1, 'material-icons': option.processedVotes.user === -1 }">thumb_down</v-icon><span class="votes">{{option.processedVotes.negative}}</span></v-btn>
+          <v-btn flat icon color="primary" @click="voteUp(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== 1, 'material-icons': option.processedVotes.user === 1 }">thumb_up</v-icon><span class="votes">{{option.processedVotes.positive}}</span></v-btn>
+          <v-btn flat icon color="primary" @click="voteDown(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== -1, 'material-icons': option.processedVotes.user === -1 }">thumb_down</v-icon><span class="votes">{{option.processedVotes.negative}}</span></v-btn>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title v-text="option.title"></v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-list-tile v-if="user">
-        <v-list-tile-action>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <input type="text" placeholder="Add option" v-model="newOption" @keyup.enter="addOption(newOption)"/>
-          <v-btn @click="addOption(newOption)">
-            <v-icon>check</v-icon>Add
-          </v-btn>
-        </v-list-tile-content>
-      </v-list-tile>
+      <v-divider v-if="user"></v-divider>
+      <v-form
+        ref="form"
+        lazy-validation
+        v-model="valid"
+        v-if="user"
+      >
+        <v-text-field
+          v-model="newOption"
+          :rules="newOptionRules"
+          label="Add option"
+          required
+        ></v-text-field>
+
+        <v-btn
+          :disabled="!valid"
+          color="success"
+          @click="addOption(newOption)"
+        >
+          Add
+        </v-btn>
+      </v-form>
     </v-list>
-  </v-layout>
+  </v-card>
 </template>
 
 <script>
@@ -32,6 +47,8 @@ export default {
   name: 'poll',
   data: () => {
     return {
+      valid: true,
+      newOptionRules: [],
       id: null,
       poll: null,
       options: [],

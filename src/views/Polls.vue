@@ -1,16 +1,19 @@
 <template>
-  <v-layout>
+  <v-card flat>
+    <v-card-title primary-title>
+      <div class="headline">My polls</div>
+    </v-card-title>
     <v-list>
       <v-list-tile v-for="poll in polls" v-bind:key="poll.id">
         <v-list-tile-action>
-          <v-btn flat color="#039be5" @click="deletePoll(poll.id)"><v-icon medium>close</v-icon>Delete</v-btn>
+          <v-btn flat color="primary" @click="deletePoll(poll.id)"><v-icon medium>close</v-icon>Delete</v-btn>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile router :to="{name: 'poll', params: {id: poll.id}}" exact>{{poll.title}}</v-list-tile>
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
-  </v-layout>
+  </v-card>
 </template>
 
 <script>

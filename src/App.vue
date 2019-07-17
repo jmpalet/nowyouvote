@@ -28,15 +28,18 @@
     </v-toolbar>
 
     <v-content>
-      <router-view/>
+      <v-layout align-center justify-center column fill-height>
+        <router-view/>
+      </v-layout>
     </v-content>
+    
     <v-bottom-nav app
-      v-if="this.$vuetify.breakpoint.name == 'xs' && !!user"
+      v-if="this.$vuetify.breakpoint.name == 'xs'"
       :value="true"
       fixed
       color="white"
     >
-      <router-link v-for="item in bottomMenu" :key="item.icon" :to="item.path">
+      <router-link v-for="item in menu" :key="item.icon" :to="item.path">
         <v-btn flat>
           <span>{{item.title}}</span>
           <v-icon>{{item.icon}}</v-icon>
@@ -57,21 +60,12 @@ export default {
         { icon: 'vpn_key', title: 'Login', path: '/login', show: !this.user },
         { icon: 'add_box', title: 'New poll', path: '/create', show: !!this.user },
         { icon: 'view_headline', title: 'My polls', path: '/polls', show: !!this.user },
-        { icon: 'exit_to_app', title: 'Logout', path: '/logout', show: !!this.user },
+        { icon: 'person', title: 'Profile', path: '/profile', show: !!this.user },
       ]
       return menu.filter((item) => {
         return item.show
       })
     },
-  },
-  data: () => {
-    return {
-      bottomMenu: [
-        { icon: 'add_box', title: 'New poll', path: '/create'},
-        { icon: 'view_headline', title: 'My polls', path: '/polls'},
-        { icon: 'person', title: 'Profile', path: '/profile'},
-      ]
-    }
   }
 }
 </script>
@@ -126,39 +120,8 @@ button {
 ul { 
   list-style-type: none;
 }
-.login {
-  margin-top: 40px;
-}
-.login input {
-  margin: 10px 0;
-  padding: 15px;
-}
-p {
-  margin-top: 40px;
-  font-size: 13px;
-}
-a {
-  color: #039be5;
-}
 a {
   text-decoration: none;
-}
-.v-list__tile__action {
-  min-width: 100px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-right: 20px;
-}
-.v-list__tile__action .v-btn__content .votes {
-  font-size: 14pt;
-  padding: 0 5px;
-}
-.v-list__tile__content {
-  align-items: center;
-  font-size: 14pt
-}
-.v-list__tile__content, .v-list__tile__action {
-  flex-direction: row;
 }
 </style>
 

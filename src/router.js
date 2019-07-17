@@ -6,7 +6,6 @@ import Polls from './views/Polls.vue'
 import Poll from './views/Poll.vue'
 import Profile from './views/Profile.vue'
 import Login from './views/Login.vue'
-import LoginAnonymously from './views/LoginAnonymously.vue'
 import SignUp from './views/SignUp.vue'
 import Logout from './views/Logout.vue'
 import store from './store'
@@ -25,11 +24,6 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: Login
-    },
-    {
-      path: '/login-anonymously',
-      name: 'login-anonymously',
-      component: LoginAnonymously
     },
     {
       path: '/sign-up',
