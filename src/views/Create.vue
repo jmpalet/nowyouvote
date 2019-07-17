@@ -21,6 +21,8 @@
           v-bind:key="key"
           v-model="option.title"
           label="Option"
+          :rules="optionRules"
+          counter="25"
           @keydown.tab="options.push({})"
         >
           <template slot="append" v-if="key == options.length-1">
@@ -50,6 +52,9 @@ export default {
       titleRules: [
         v => !!v || 'Title is required',
         v => v && v.length <= 25 || 'Max 25 characters',
+      ],
+      optionRules: [
+        v => !v || v.length <= 25 || 'Max 25 characters',
       ],
       options: [{}]
     }
