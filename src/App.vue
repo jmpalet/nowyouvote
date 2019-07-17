@@ -28,7 +28,8 @@
     </v-toolbar>
 
     <v-content>
-      <v-layout align-center justify-center column fill-height>
+      <v-layout fluid ma-0 pa-0 align-center justify-center column fill-height
+      style="overflow:hidden">
         <router-view/>
       </v-layout>
     </v-content>

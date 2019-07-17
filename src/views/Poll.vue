@@ -50,7 +50,7 @@ export default {
       valid: true,
       newOptionRules: [],
       id: null,
-      poll: null,
+      poll: {title: null},
       options: [],
       newOption: "",
     }
@@ -174,7 +174,7 @@ export default {
 .v-list__tile__content {
   align-items: center;
 }
-.v-list__tile__content, .v-list__tile__action {
+.v-list__tile__action {
   flex-direction: row;
 }
 </style>

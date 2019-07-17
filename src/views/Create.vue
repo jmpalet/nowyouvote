@@ -1,6 +1,5 @@
 <template>
-  <v-layout align-center justify-center column fill-height>
-    <v-card flat v-if="!id">
+  <v-card flat>
       <v-card-title primary-title>
         <div class="headline">New poll</div>
       </v-card-title>
@@ -12,6 +11,7 @@
         <v-text-field
           v-model="title"
           :rules="titleRules"
+          counter="25"
           label="Title"
           required
         ></v-text-field>
@@ -38,14 +38,6 @@
         </v-btn>
       </v-form>
     </v-card>
-    <v-card flat v-if="id" class="text-xs-center">
-      <v-card-text>Poll created!</v-card-text>
-      <router-link :to="{name: 'poll', params: {id: id}}" v-if="id">
-        Share it
-      </router-link>
-      <v-icon>share</v-icon>
-    </v-card>
-  </v-layout>
 </template>
 
 <script>
@@ -57,23 +49,22 @@ export default {
       title: null,
       titleRules: [
         v => !!v || 'Title is required',
+        v => v && v.length <= 25 || 'Max 25 characters',
       ],
-      id: null,
       options: [{}]
     }
   },
   methods: {
-    test (test) {
-      console.log(test)
-    },
     async create () {
       await this.$db.newPoll(this.title).then((data) => {
-        this.id = data.id
         this.options.forEach(async (option) => {
           if ('title' in option) {
-            await this.$db.newOption(data.id, option.title).then((data) => {
-            })
+            await this.$db.newOption(data.id, option.title)
           }
+        })
+        this.$router.push({
+          name: 'poll',
+          params: {id: data.id}
         })
       })
     }
