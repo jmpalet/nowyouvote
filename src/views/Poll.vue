@@ -3,7 +3,7 @@
     <v-card-title primary-title>
       <div class="headline">{{poll.title}}</div>
     </v-card-title>
-    <v-list>
+    <transition-group name="sorted-list" tag="ul">
       <v-list-tile v-for="option in sortedOptionsByScore" :key="option.title">
         <v-list-tile-action>
           <v-btn flat icon color="primary" @click="voteUp(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== 1, 'material-icons': option.processedVotes.user === 1 }">thumb_up</v-icon><span class="votes">{{option.processedVotes.positive}}</span></v-btn>
@@ -35,7 +35,7 @@
           Add
         </v-btn>
       </v-form>
-    </v-list>
+    </transition-group>
   </v-card>
 </template>
 
@@ -179,5 +179,11 @@ export default {
 }
 .v-list__tile__action {
   flex-direction: row;
+}
+</style>
+
+<style scoped>
+.sorted-list-move {
+  transition: transform 0.5s;
 }
 </style>
