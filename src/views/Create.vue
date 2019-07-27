@@ -5,7 +5,6 @@
       </v-card-title>
       <v-form
         ref="form"
-        lazy-validation
         v-model="valid"
       >
         <v-text-field

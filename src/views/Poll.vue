@@ -16,13 +16,13 @@
       <v-divider v-if="user"></v-divider>
       <v-form
         ref="form"
-        lazy-validation
         v-model="valid"
         v-if="user"
       >
         <v-text-field
           v-model="newOption"
           :rules="newOptionRules"
+          counter="25"
           label="Add option"
           required
         ></v-text-field>
@@ -47,8 +47,11 @@ export default {
   name: 'poll',
   data: () => {
     return {
-      valid: true,
-      newOptionRules: [],
+      valid: false,
+      newOptionRules: [
+        v => !!v || 'Name is required',
+        v => v && v.length <= 25 || 'Max 25 characters',
+      ],
       id: null,
       poll: {title: null},
       options: [],
