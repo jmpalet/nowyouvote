@@ -26,10 +26,9 @@
         </v-list>
       </v-menu>
     </v-toolbar>
-
+    
     <v-content>
-      <v-layout fluid ma-0 pa-0 align-center justify-center column fill-height
-      style="overflow:hidden">
+      <v-layout fluid ma-0 pa-0 align-center column fill-height>
         <router-view/>
       </v-layout>
     </v-content>
@@ -56,6 +55,9 @@ import {mapState} from 'vuex'
 export default {
   computed: {
     ...mapState(['user']),
+    mobile() {
+      return this.$vuetify.breakpoint.name == 'xs'
+    },
     menu() {
       var menu = [
         { icon: 'vpn_key', title: 'Login', path: '/login', show: !this.user },

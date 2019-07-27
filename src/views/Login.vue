@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card flat>
     <v-card-text>
       <v-form>
         <v-text-field prepend-icon="person" v-model="email" name="login" label="Login" type="text"></v-text-field>

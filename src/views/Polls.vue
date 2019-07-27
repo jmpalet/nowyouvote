@@ -3,17 +3,23 @@
     <v-card-title primary-title>
       <div class="headline">My polls</div>
     </v-card-title>
-    <v-list>
-      <v-list-tile v-for="poll in polls" v-bind:key="poll.id">
-        <v-list-tile-action>
-          <v-btn flat color="primary" @click="deletePoll(poll.id)"><v-icon medium>close</v-icon>Delete</v-btn>
-          <v-btn flat color="primary" :to="{name: 'poll', params: {id: poll.id}}"><v-icon medium>chevron_right</v-icon>View</v-btn>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile router :to="{name: 'poll', params: {id: poll.id}}" exact>{{poll.title}}</v-list-tile>
-        </v-list-tile-content>
-      </v-list-tile>
-    </v-list>
+    <v-card column v-for="poll in polls" v-bind:key="poll.id" class="ma-3 pa-3">
+      <v-flex class="title">
+        {{poll.title}}
+      </v-flex>
+      <v-flex>
+        <v-container pa-0>
+          <v-layout row>
+            <v-flex>
+              <v-btn flat color="primary" @click="deletePoll(poll.id)"><v-icon medium>close</v-icon>Delete</v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn flat color="primary" :to="{name: 'poll', params: {id: poll.id}}"><v-icon medium>chevron_right</v-icon>View</v-btn>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-flex>
+    </v-card>
   </v-card>
 </template>
 
