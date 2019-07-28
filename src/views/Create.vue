@@ -12,6 +12,7 @@
           :rules="titleRules"
           counter="25"
           label="Title"
+          ref="test"
           required
         ></v-text-field>
 
@@ -22,11 +23,13 @@
           label="Option"
           :rules="optionRules"
           counter="25"
-          @keydown.tab="options.push({})"
+          :ref="key"
+          @keydown.tab.exact="keydownAdd(isLastOption(key))"
+          @keydown.delete.exact="keydownRemove(isLastOption(key) && !isFirstOption(key))"
         >
-          <template slot="append" v-if="key == options.length-1">
-            <v-btn icon small @click="options.push({})" style="margin:0"><v-icon>add</v-icon></v-btn>
-            <v-btn icon small @click="options.pop()"  style="margin:0"><v-icon>remove</v-icon></v-btn>
+          <template slot="append" v-if="isLastOption(key)">
+            <v-btn icon small @click="pushOption()" style="margin:0"><v-icon>add</v-icon></v-btn>
+            <v-btn icon small @click="popOption()"  style="margin:0"><v-icon>remove</v-icon></v-btn>
           </template>
         </v-text-field>
 
@@ -71,6 +74,29 @@ export default {
           params: {id: data.id}
         })
       })
+    },
+    isFirstOption(key) {
+      return key == 0
+    },
+    isLastOption(key) {
+      return key == this.options.length-1
+    },
+    keydownAdd(valid) {
+      if (valid) {
+        this.pushOption()
+      }
+    },
+    keydownRemove(valid) {
+      if (valid) {
+        this.popOption()
+      }
+    },
+    pushOption() {
+      this.options.push({})
+    },
+    popOption() {
+      this.options.pop()
+      this.$refs[this.options.length - 1][0].focus()
     }
   }
 }
