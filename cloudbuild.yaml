@@ -11,7 +11,7 @@ steps:
   - '-c'
   - |
     echo $_ENV
-    [[ "$_ENV" == "production" ]] && npm run build-prod && echo "Deploying on production..." 
+    [[ "$_ENV" == "production" ]] && npm run build-stg && echo "Deploying on production..." 
     [[ "$_ENV" == "staging" ]] && npm run build-stg && echo "Deploying on staging..."  
 - name: 'gcr.io/$PROJECT_ID/firebase'
   waitFor:
