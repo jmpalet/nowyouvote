@@ -1,9 +1,28 @@
 <template>
   <v-card flat>
     <v-card-text>
-      <v-form>
-        <v-text-field prepend-icon="person" v-model="email" name="login" label="Login" type="text"></v-text-field>
-        <v-text-field prepend-icon="lock" v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
+      <v-form
+        ref="form"
+        v-model="valid"
+        lazy-validation
+      >
+        <v-text-field
+          prepend-icon="person"
+          v-model="email"
+          name="login"
+          label="Email"
+          type="text"
+          :rules="emailRules"
+          required
+        ></v-text-field>
+        <v-text-field
+          prepend-icon="lock"
+          v-model="password"
+          name="password"
+          label="Password"
+          id="password" 
+          type="password"
+        ></v-text-field>
       </v-form>
     </v-card-text>
     <v-card-actions>
@@ -26,7 +45,12 @@
     data() {
       return {
         email: '',
-        password: ''
+        password: '',
+        valid: true,
+        emailRules: [
+          v => !!v || 'E-mail is required',
+          v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        ],
       }
     },
     watch: {
@@ -38,7 +62,9 @@
     },
     methods: {
       async onSubmit () {
-        await this.$auth.signup(this.email, this.password)
+        if (this.$refs.form.validate()) {
+          await this.$auth.signup(this.email, this.password)
+        }  
       }
     }
   }
