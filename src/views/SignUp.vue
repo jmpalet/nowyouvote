@@ -24,6 +24,13 @@
           type="password"
         ></v-text-field>
       </v-form>
+      <v-alert
+        outlined
+        type="warning"
+        :value="error"
+      >
+        {{error}}
+      </v-alert>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
@@ -46,6 +53,7 @@
       return {
         email: '',
         password: '',
+        error: null,
         valid: true,
         emailRules: [
           v => !!v || 'E-mail is required',
@@ -63,7 +71,9 @@
     methods: {
       async onSubmit () {
         if (this.$refs.form.validate()) {
-          await this.$auth.signup(this.email, this.password)
+          await this.$auth.signup(this.email, this.password).catch((e) => {
+            this.error = e.message
+          })
         }  
       }
     }
