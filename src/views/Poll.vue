@@ -12,7 +12,7 @@
         <v-list-tile-content>
           <v-list-tile-title v-text="option.title"></v-list-tile-title>
         </v-list-tile-content>
-        <v-list-tile-action v-if="user.uid == poll.user">
+        <v-list-tile-action v-if="user && user.uid == poll.user">
           <v-btn flat icon @click="removeOption(option)"><v-icon>clear</v-icon></v-btn>
         </v-list-tile-action>
       </v-list-tile>
