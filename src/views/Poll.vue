@@ -3,7 +3,7 @@
     <v-card-title primary-title>
       <div class="headline">{{poll.title}}</div>
     </v-card-title>
-    <transition-group name="sorted-list" tag="ul">
+    <transition-group :name="transitionName" tag="ul">
       <v-list-tile v-for="option in sortedOptionsByScore" :key="option.title">
         <v-list-tile-action>
           <v-btn flat icon color="primary" @click="voteUp(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== 1, 'material-icons': option.processedVotes.user === 1 }">thumb_up</v-icon><span class="votes">{{option.processedVotes.positive}}</span></v-btn>
@@ -12,11 +12,16 @@
         <v-list-tile-content>
           <v-list-tile-title v-text="option.title"></v-list-tile-title>
         </v-list-tile-content>
+        <v-list-tile-action v-if="user.uid == poll.user">
+          <v-btn flat icon @click="removeOption(option)"><v-icon>clear</v-icon></v-btn>
+        </v-list-tile-action>
       </v-list-tile>
-      <v-divider v-if="user"></v-divider>
+    </transition-group>
+    <v-divider v-if="user"></v-divider>
       <v-form
         ref="form"
         v-model="valid"
+        lazy-validation
         v-if="user"
       >
         <v-text-field
@@ -24,7 +29,6 @@
           :rules="newOptionRules"
           counter="25"
           label="Add option"
-          required
         ></v-text-field>
 
         <v-btn
@@ -35,7 +39,6 @@
           Add
         </v-btn>
       </v-form>
-    </transition-group>
   </v-card>
 </template>
 
@@ -47,10 +50,11 @@ export default {
   name: 'poll',
   data: () => {
     return {
+      transitionName: null,
       valid: false,
       newOptionRules: [
         v => !!v || 'Name is required',
-        v => v && v.length <= 25 || 'Max 25 characters',
+        v => (v && v.length <= 25) || 'Max 25 characters',
       ],
       id: null,
       poll: {title: null},
@@ -61,7 +65,8 @@ export default {
   computed: {
     ...mapGetters(['user']),
     sortedOptionsByScore() {
-      return this.options.sort((a,b) => {
+      let clone = this.options.slice()
+      return clone.sort((a,b) => {
         if ('processedVotes' in a && 'processedVotes' in b) {
           return b.processedVotes.score - a.processedVotes.score
         }
@@ -84,12 +89,17 @@ export default {
       return (phat + z*z / (2*n) - z * Math.sqrt((phat * (1 - phat) + z*z / (4*n)) / n)) / (1 + z*z/n)
     },
     vote (optionId, vote) {
-      this.$db.vote(this.id, optionId, vote).catch(() => {
-        router.push({
-          name: 'login',
-          query: { redirect: this.$route.fullPath }
+      this.transitionName = "sorted-list"
+      this.$db.vote(this.id, optionId, vote)
+        .then(() => {
+          this.transitionName = null
         })
-      })
+        .catch(() => {
+          router.push({
+            name: 'login',
+            query: { redirect: this.$route.fullPath }
+          })
+        })
     },
     getPoll (pollId) {
       this.$db.getPoll(pollId).onSnapshot((doc) => {
@@ -145,9 +155,13 @@ export default {
       }
     },
     async addOption (newOption) {
-      await this.$db.newOption(this.id, newOption).then(() => {
-        this.newOption = ""
-      })
+      if (this.$refs.form.validate()) {
+        await this.$db.newOption(this.id, newOption)
+      }
+    },
+    removeOption (option) {
+      let opt = this.options[this.getIdxByOptionId(option.id)]
+      this.$db.getOption(this.id, opt.id).delete()
     },
     getIdxByOptionId(optionId) {
       return this.options.findIndex((option) => {

@@ -68,6 +68,9 @@ export default {
       newOption: async(id, title) => {
         return await db.collection('polls').doc(id).collection('options').add({title: title})
       },
+      getOption: (poll, option) => {
+        return db.collection('polls').doc(poll).collection('options').doc(option)
+      },
       getPolls: () => {
         return db.collection("polls").orderBy("created", 'desc').where("user", "==", store.state.user.uid)
       },
