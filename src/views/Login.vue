@@ -71,7 +71,7 @@
     methods: {
       async onSubmit () {
         if (this.$refs.form.validate()) {
-          await this.$auth.login(this.email, this.password).catch((e) => {
+          await this.$auth.login(this.email, this.password).catch(() => {
             this.error = "Authentication failed"
           })
         }  
