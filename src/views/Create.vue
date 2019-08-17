@@ -1,47 +1,48 @@
 <template>
   <v-card flat>
-      <v-card-title primary-title>
-        <div class="headline">New poll</div>
-      </v-card-title>
-      <v-form
-        ref="form"
-        v-model="valid"
+    <v-card-title primary-title>
+      <div class="headline">New poll</div>
+    </v-card-title>
+    <v-form
+      ref="form"
+      v-model="valid"
+      class="px-3"
+    >
+      <v-text-field
+        v-model="title"
+        :rules="titleRules"
+        counter="25"
+        label="Title"
+        ref="test"
+        required
+      ></v-text-field>
+
+      <v-text-field
+        v-for="(option, key) in options"
+        v-bind:key="key"
+        v-model="option.title"
+        label="Option"
+        :rules="optionRules"
+        counter="25"
+        :ref="key"
+        @keydown.tab.exact="keydownAdd(isLastOption(key))"
+        @keydown.delete.exact="keydownRemove(isLastOption(key) && !isFirstOption(key))"
       >
-        <v-text-field
-          v-model="title"
-          :rules="titleRules"
-          counter="25"
-          label="Title"
-          ref="test"
-          required
-        ></v-text-field>
+        <template slot="append" v-if="isLastOption(key)">
+          <v-btn icon small @click="pushOption()" style="margin:0"><v-icon>add</v-icon></v-btn>
+          <v-btn icon small @click="popOption()"  style="margin:0"><v-icon>remove</v-icon></v-btn>
+        </template>
+      </v-text-field>
 
-        <v-text-field
-          v-for="(option, key) in options"
-          v-bind:key="key"
-          v-model="option.title"
-          label="Option"
-          :rules="optionRules"
-          counter="25"
-          :ref="key"
-          @keydown.tab.exact="keydownAdd(isLastOption(key))"
-          @keydown.delete.exact="keydownRemove(isLastOption(key) && !isFirstOption(key))"
-        >
-          <template slot="append" v-if="isLastOption(key)">
-            <v-btn icon small @click="pushOption()" style="margin:0"><v-icon>add</v-icon></v-btn>
-            <v-btn icon small @click="popOption()"  style="margin:0"><v-icon>remove</v-icon></v-btn>
-          </template>
-        </v-text-field>
-
-        <v-btn
-          :disabled="!valid"
-          color="success"
-          @click="create"
-        >
-          Create
-        </v-btn>
-      </v-form>
-    </v-card>
+      <v-btn
+        :disabled="!valid"
+        color="success"
+        @click="create"
+      >
+        Create
+      </v-btn>
+    </v-form>
+  </v-card>
 </template>
 
 <script>

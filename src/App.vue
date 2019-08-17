@@ -31,9 +31,11 @@
     </v-toolbar>
     
     <v-content>
-      <v-layout fluid ma-0 pa-0 align-center column fill-height>
-        <router-view/>
-      </v-layout>
+      <v-container>
+        <v-layout :align-center="!mobile" justify-center :column="!mobile" fill-height>
+          <router-view/>
+        </v-layout>
+      </v-container>
     </v-content>
     
     <v-bottom-nav app

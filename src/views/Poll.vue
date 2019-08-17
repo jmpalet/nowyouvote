@@ -1,45 +1,48 @@
 <template>
-  <v-card flat>
-    <v-card-title primary-title>
-      <div class="headline">{{poll.title}}</div>
-    </v-card-title>
-    <transition-group :name="transitionName" tag="ul">
-      <v-list-tile v-for="option in sortedOptionsByScore" :key="option.title">
-        <v-list-tile-action>
-          <v-btn flat icon color="primary" @click="voteUp(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== 1, 'material-icons': option.processedVotes.user === 1 }">thumb_up</v-icon><span class="votes">{{option.processedVotes.positive}}</span></v-btn>
-          <v-btn flat icon color="primary" @click="voteDown(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== -1, 'material-icons': option.processedVotes.user === -1 }">thumb_down</v-icon><span class="votes">{{option.processedVotes.negative}}</span></v-btn>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title v-text="option.title"></v-list-tile-title>
-        </v-list-tile-content>
-        <v-list-tile-action v-if="user && user.uid == poll.user">
-          <v-btn flat icon @click="removeOption(option)"><v-icon>clear</v-icon></v-btn>
-        </v-list-tile-action>
-      </v-list-tile>
-    </transition-group>
+  <v-layout column>
+    <v-card flat>
+      <v-card-title primary-title>
+        <div class="headline">{{poll.title}}</div>
+      </v-card-title>
+      <transition-group :name="transitionName" tag="ul" class="pa-0">
+        <v-list-tile v-for="option in sortedOptionsByScore" :key="option.title">
+          <v-list-tile-action class="vote-action">
+            <v-btn flat icon color="primary" @click="voteUp(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== 1, 'material-icons': option.processedVotes.user === 1 }">thumb_up</v-icon><span class="votes">{{option.processedVotes.positive}}</span></v-btn>
+            <v-btn flat icon color="primary" @click="voteDown(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== -1, 'material-icons': option.processedVotes.user === -1 }">thumb_down</v-icon><span class="votes">{{option.processedVotes.negative}}</span></v-btn>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title v-text="option.title"></v-list-tile-title>
+          </v-list-tile-content>
+          <v-list-tile-action v-if="user && user.uid == poll.user" class="ma-0 pa-0">
+            <v-btn flat icon @click="removeOption(option)"><v-icon>clear</v-icon></v-btn>
+          </v-list-tile-action>
+        </v-list-tile>
+      </transition-group>
+    </v-card>
     <v-divider v-if="user"></v-divider>
-      <v-form
-        ref="form"
-        v-model="valid"
-        lazy-validation
-        v-if="user"
-      >
-        <v-text-field
-          v-model="newOption"
-          :rules="newOptionRules"
-          counter="25"
-          label="Add option"
-        ></v-text-field>
+    <v-form
+      ref="form"
+      v-model="valid"
+      lazy-validation
+      v-if="user"
+      class="px-3"
+    >
+      <v-text-field
+        v-model="newOption"
+        :rules="newOptionRules"
+        counter="25"
+        label="Add option"
+      ></v-text-field>
 
-        <v-btn
-          :disabled="!valid"
-          color="success"
-          @click="addOption(newOption)"
-        >
-          Add
-        </v-btn>
-      </v-form>
-  </v-card>
+      <v-btn
+        :disabled="!valid"
+        color="success"
+        @click="addOption(newOption)"
+      >
+        Add
+      </v-btn>
+    </v-form>
+  </v-layout>
 </template>
 
 <script>
@@ -178,7 +181,7 @@ export default {
 </script>
 
 <style scoped>
-.v-list__tile__action {
+.v-list__tile__action.vote-action {
   min-width: 100px;
   padding-left: 10px;
   padding-right: 10px;
