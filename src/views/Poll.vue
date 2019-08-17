@@ -26,6 +26,8 @@
       lazy-validation
       v-if="user"
       class="px-3"
+      @submit="addOption(newOption)"
+      onSubmit="return false;"
     >
       <v-text-field
         v-model="newOption"
@@ -35,9 +37,9 @@
       ></v-text-field>
 
       <v-btn
+        type="submit"
         :disabled="!valid"
         color="success"
-        @click="addOption(newOption)"
       >
         Add
       </v-btn>
@@ -58,6 +60,7 @@ export default {
       newOptionRules: [
         v => !!v || 'Name is required',
         v => (v && v.length <= 25) || 'Max 25 characters',
+        v => v.replace(/^\s+|\s+$/g, '').length > 0 || 'This looks empty',
       ],
       id: null,
       poll: {title: null},
@@ -160,6 +163,8 @@ export default {
     async addOption (newOption) {
       if (this.$refs.form.validate()) {
         await this.$db.newOption(this.id, newOption)
+        this.newOption = null
+        this.valid = true
       }
     },
     removeOption (option) {
