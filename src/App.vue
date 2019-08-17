@@ -3,7 +3,10 @@
     <v-toolbar app absolute>
       <v-toolbar-title class="headline">
         <router-link class="logo" to="/">
-          <h1 class="logo"><span class="logo-1">now</span><span class="logo-2">you</span><span class="logo-3">vote</span><span class="logo-4">.com</span></h1>
+          <v-layout row>
+            <v-icon medium color="#3c3c3c">thumb_up</v-icon>
+            <h1 class="logo"><span class="logo-1">now</span><span class="logo-2">you</span><span class="logo-3">vote</span><span class="logo-4">.com</span></h1>
+          </v-layout>
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -74,9 +77,6 @@ export default {
 </script>
 
 <style>
-.headline {
-  padding-top: 14px;
-}
 .logo:hover {
   text-decoration: none;
 }
@@ -84,7 +84,7 @@ h1.logo {
   font-size: 26px;
   font-weight: 300;
   color: rgba(0,0,0,0.6);
-  margin: 0 0 22px;
+  margin-left: 4px;
 }
 h1.logo .logo-1 {
   color:#5c5c5c;
