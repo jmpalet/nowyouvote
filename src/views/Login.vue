@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card flat class="text-xs-center">
     <v-card-text>
       <v-form
         ref="form"
@@ -37,6 +37,12 @@
       <v-btn color="primary" @click="onSubmit" :disabled="!valid">Login</v-btn>
       <v-card-text>You don't have an account ? You can <router-link :to="{ name: 'sign-up', query: { redirect: this.nextRoute }}">create one</router-link></v-card-text>
     </v-card-actions>
+    <v-card-text>
+      Or sign in with:
+    </v-card-text>
+    <v-btn icon @click="loginWithGoogle" class="pa-2">
+      <img alt="Google Logo" src="../assets/google-logo.png">
+    </v-btn>
   </v-card>
 </template>
 
@@ -69,6 +75,11 @@
       }
     },
     methods: {
+      loginWithGoogle() {
+        this.$auth.loginWithGoogle().catch(() => {
+          this.error = "Authentication failed"
+        })
+      },
       async onSubmit () {
         if (this.$refs.form.validate()) {
           await this.$auth.login(this.email, this.password).catch(() => {

@@ -23,6 +23,10 @@ export default {
       loginAnonymously: async () => {
         return await auth.signInAnonymously()
       },
+      loginWithGoogle: async () => {
+        var provider = new firebase.auth.GoogleAuthProvider()
+        return await auth.signInWithPopup(provider)
+      },
       login: async (username, pass) => {
         return await auth.signInWithEmailAndPassword(username, pass)
       },
