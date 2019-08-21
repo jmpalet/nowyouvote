@@ -25,7 +25,7 @@ export default {
       },
       loginWithGoogle: async () => {
         var provider = new firebase.auth.GoogleAuthProvider()
-        return await auth.signInWithPopup(provider)
+        return await auth.signInWithRedirect(provider)
       },
       login: async (username, pass) => {
         return await auth.signInWithEmailAndPassword(username, pass)
