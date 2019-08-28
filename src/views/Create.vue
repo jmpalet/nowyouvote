@@ -26,7 +26,7 @@
         counter="25"
         :ref="key"
         @keydown.tab.exact="keydownAdd(isLastOption(key))"
-        @keydown.delete.exact="keydownRemove(isLastOption(key) && !isFirstOption(key))"
+        @keydown.delete.exact="keydownRemove(isLastOption(key) && !isFirstOption(key) && !option.title)"
       >
         <template slot="append" v-if="isLastOption(key)">
           <v-btn icon small @click="pushOption()" style="margin:0"><v-icon>add</v-icon></v-btn>
