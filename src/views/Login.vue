@@ -71,8 +71,6 @@
     },
     watch: {
       user (auth) {
-        console.log("watch")
-        console.log(auth)
         if(auth){
             this.$router.replace(this.nextRoute)
         }
@@ -93,7 +91,6 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      console.log(from.fullPath)
       next()
     }
   }
