@@ -40,8 +40,10 @@
     <v-card-text>
       Or sign in with:
     </v-card-text>
-    <v-btn icon @click="loginWithGoogle" class="pa-2">
-      <img alt="Google Logo" src="../assets/google-logo.png">
+    <v-btn icon fab @click="loginWithGoogle" light>
+      <v-avatar size=40>
+        <img alt="Google Logo" src="../assets/google-logo.png">
+      </v-avatar>
     </v-btn>
   </v-card>
 </template>
@@ -69,14 +71,16 @@
     },
     watch: {
       user (auth) {
+        console.log("watch")
+        console.log(auth)
         if(auth){
             this.$router.replace(this.nextRoute)
         }
       }
     },
     methods: {
-      loginWithGoogle() {
-        this.$auth.loginWithGoogle().catch(() => {
+      async loginWithGoogle() {
+        await this.$auth.loginWithGoogle().catch(() => {
           this.error = "Authentication failed"
         })
       },
@@ -87,6 +91,10 @@
           })
         }  
       }
+    },
+    beforeRouteEnter (to, from, next) {
+      console.log(from.fullPath)
+      next()
     }
   }
 </script>

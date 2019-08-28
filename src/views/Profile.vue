@@ -5,7 +5,7 @@
     </v-flex>
     <v-card-text v-if="user">
       <v-avatar
-        size="180px"
+        size="90"
         v-if="user.photoURL"
       >
         <img
@@ -25,11 +25,6 @@ export default {
   data() {
     return {
       user: store.state.user
-    }
-  },
-  methods: {
-    log() {
-      console.log(this.user)
     }
   }
 }
