@@ -5,13 +5,13 @@
         <div class="headline">{{poll.title}}</div>
       </v-card-title>
       <transition-group :name="transitionName" tag="ul" class="pa-0">
-        <v-list-tile v-for="option in sortedOptionsByScore" :key="option.title">
+        <v-list-tile v-for="option in sortedOptionsByScore" :key="option.title" class="option">
           <v-list-tile-action class="vote-action">
             <v-btn flat icon color="primary" @click="voteUp(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== 1, 'material-icons': option.processedVotes.user === 1 }">thumb_up</v-icon><span class="votes">{{option.processedVotes.positive}}</span></v-btn>
             <v-btn flat icon color="primary" @click="voteDown(option.id)"><v-icon medium v-bind:class="{ 'material-icons-outlined': option.processedVotes.user !== -1, 'material-icons': option.processedVotes.user === -1 }">thumb_down</v-icon><span class="votes">{{option.processedVotes.negative}}</span></v-btn>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title v-text="option.title"></v-list-tile-title>
+            <v-list-tile-title v-text="option.title" class="poll-title"></v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action v-if="user && user.uid == poll.user" class="ma-0 pa-0">
             <v-btn flat icon @click="removeOption(option)"><v-icon>clear</v-icon></v-btn>
@@ -32,7 +32,7 @@
       <v-text-field
         v-model="newOption"
         :rules="newOptionRules"
-        counter="25"
+        counter="50"
         label="Add option"
       ></v-text-field>
 
@@ -59,7 +59,7 @@ export default {
       valid: false,
       newOptionRules: [
         v => !!v || 'Name is required',
-        v => (v && v.length <= 25) || 'Max 25 characters',
+        v => (v && v.length <= 50) || 'Max 50 characters',
         v => v.replace(/^\s+|\s+$/g, '').length > 0 || 'This looks empty',
       ],
       id: null,
@@ -185,27 +185,44 @@ export default {
 }
 </script>
 
-<style scoped>
-.v-list__tile__action.vote-action {
-  min-width: 100px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-right: 20px;
-}
-.v-list__tile__action .v-btn__content .votes {
-  font-size: 14pt;
-  padding: 0 5px;
-}
-.v-list__tile__content {
-  align-items: center;
-}
-.v-list__tile__action {
-  flex-direction: row;
+<style>
+.v-list__tile {
+  align-items: end;
+  padding: 0 12px;
+  height: 100% !important;
 }
 </style>
 
 <style scoped>
+.v-list__tile__action.vote-action {
+  padding-left: 6px;
+  padding-right: 10px;
+  margin-right: 10px;
+  justify-content: left;
+  min-width: 80px;
+}
+.v-list__tile__action.vote-action button:first-child {
+  margin-right: 18px;
+}
+.v-list__tile__action .v-btn__content .votes {
+  font-size: 14pt;
+  padding: 0 3px;
+}
+.v-list__tile__action {
+  display: flex;
+  flex-direction: row;
+  box-sizing: content-box;
+  align-items: center;
+}
 .sorted-list-move {
   transition: transform 0.5s;
+}
+.poll-title {
+  display: flex;
+  height: 100%;
+  white-space: normal;
+  word-break: break-word;
+  align-items: center;
+  margin-bottom: 10px;
 }
 </style>

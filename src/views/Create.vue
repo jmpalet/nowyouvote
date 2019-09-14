@@ -23,7 +23,7 @@
         v-model="option.title"
         label="Option"
         :rules="optionRules"
-        counter="25"
+        counter="50"
         :ref="key"
         @keydown.tab.exact="keydownAdd(isLastOption(key))"
         @keydown.delete.exact="keydownRemove(isLastOption(key) && !isFirstOption(key) && !option.title)"
@@ -57,7 +57,7 @@ export default {
         v => v && v.length <= 25 || 'Max 25 characters',
       ],
       optionRules: [
-        v => !v || v.length <= 25 || 'Max 25 characters',
+        v => !v || v.length <= 50 || 'Max 50 characters',
       ],
       options: [{}]
     }
